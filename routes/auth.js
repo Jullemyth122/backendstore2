@@ -253,6 +253,56 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// Route to update a user account
+router.put('/update-account/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { email, password, displayName } = req.body;
+
+        // Check if the user exists
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Update the user's information
+        user.email = email;
+        user.password = password; // You might want to hash the password again here if it's being changed
+        user.displayName = displayName;
+
+        // Save the updated user document
+        await user.save();
+
+        res.status(200).json({ message: 'Account updated successfully', user });
+    } catch (error) {
+        console.error('Error updating account:', error);
+        res.status(500).json({ message: 'Error updating account' });
+    }
+});
+
+// Route to delete a user account
+router.delete('/delete-account/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Check if the user exists
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Delete the user
+        await user.remove();
+
+        res.status(200).json({ message: 'Account deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting account:', error);
+        res.status(500).json({ message: 'Error deleting account' });
+    }
+});
+
 // routes/auth.js
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;

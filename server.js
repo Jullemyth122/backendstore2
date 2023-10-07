@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 require('dotenv').config();
 require('./config/passport')
+
 // const authRoute = require('./routes/auth')
 const authRoute = require('./routes/auth')
 const cartsRoute = require('./routes/carts')
